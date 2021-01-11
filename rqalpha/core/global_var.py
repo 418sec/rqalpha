@@ -51,9 +51,11 @@ class GlobalVars(object):
         return pickle.dumps(dict_data)
 
     def set_state(self, state):
+        restricted_loads(state)
         dict_data = pickle.loads(state)
         for key, value in dict_data.items():
             try:
+                restricted_loads(value)
                 self.__dict__[key] = pickle.loads(value)
                 system_log.debug("restore g.{} {}", key, type(self.__dict__[key]))
             except Exception:
